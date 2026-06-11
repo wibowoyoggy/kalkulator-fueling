@@ -6,19 +6,20 @@
 <title>Kalkulator Fueling Lari — HM &amp; FM</title>
 <style>
   :root{
-    --navy:#0d2c54;        /* biru tua */
-    --navy-light:#1b4a86;
-    --navy-deep:#091f3c;
-    --accent:#1769c4;      /* biru aksen */
-    --yellow:#f2b705;      /* kuning */
-    --yellow-soft:#fdf3d3;
+    --navy:#2a3340;        /* slate gelap */
+    --navy-light:#3c4757;
+    --navy-deep:#1d242e;
+    --accent:#0f766e;      /* teal */
+    --accent-light:#13938a;
+    --yellow:#b08a45;      /* gold elegan (aksen) */
+    --yellow-soft:#f4efe4;
     --white:#ffffff;
-    --gray:#f5f7fa;
-    --gray-line:#e3e8f0;
-    --text:#1a2538;
-    --muted:#62708a;
+    --gray:#f6f4f0;        /* warm off-white */
+    --gray-line:#e6e2da;
+    --text:#2b333d;
+    --muted:#7b828c;
     --radius:14px;
-    --shadow:0 6px 24px rgba(13,44,84,.09);
+    --shadow:0 6px 24px rgba(29,36,46,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{
@@ -44,7 +45,7 @@
     font-size:.7rem;font-weight:800;padding:3px 11px;border-radius:4px;
     text-transform:uppercase;letter-spacing:.6px;margin-left:6px;vertical-align:middle;
   }
-  header p{margin-top:10px;color:#c4d2e6;font-size:.92rem;max-width:660px;}
+  header p{margin-top:9px;color:#c8cdd4;font-size:.78rem;max-width:620px;line-height:1.5;}
 
   main{max-width:920px;margin:-16px auto 0;padding:0 16px;}
 
@@ -62,7 +63,7 @@
   /* FORM */
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
   .field{display:flex;flex-direction:column;gap:7px;}
-  .field label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .field label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
   .field input,.field select{
     padding:11px 12px;border:1.5px solid var(--gray-line);border-radius:8px;
     font-size:1rem;color:var(--text);background:var(--white);transition:.15s;width:100%;
@@ -94,30 +95,56 @@
   .res-head .race-pill{
     background:var(--yellow);color:var(--navy-deep);font-weight:800;padding:5px 14px;border-radius:5px;font-size:.82rem;letter-spacing:.5px;
   }
-  .res-head small{display:block;color:#c4d2e6;font-weight:400;margin-top:2px;}
+  .res-head small{display:block;color:#c8cdd4;font-weight:400;margin-top:2px;font-size:.78rem;}
 
-  .phase{border-left:4px solid var(--yellow);background:var(--gray);border-radius:0 10px 10px 0;padding:15px 18px;margin-bottom:14px;}
-  .phase .when{font-size:.74rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-  .phase h3{font-size:.98rem;color:var(--navy);margin:3px 0;font-weight:800;}
-  .phase .big{font-size:1.3rem;font-weight:800;color:var(--navy);margin:6px 0 3px;}
-  .phase .sub{font-size:.88rem;color:var(--muted);}
+  .phase{border-left:3px solid var(--accent);background:var(--gray);border-radius:0 10px 10px 0;padding:12px 15px;margin-bottom:11px;}
+  .phase .when{font-size:.6rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .phase h3{font-size:.72rem;color:var(--navy);margin:2px 0;font-weight:800;text-transform:uppercase;letter-spacing:.3px;}
+  .phase .big{font-size:1rem;font-weight:800;color:var(--accent);margin:4px 0 2px;}
+  .phase .sub{font-size:.68rem;color:var(--muted);line-height:1.5;}
 
-  .gel-box{background:var(--yellow-soft);border:1.5px solid var(--yellow);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
-  .gel-box h3{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
+  .gel-box{background:var(--yellow-soft);border:1px solid var(--yellow);border-radius:10px;padding:15px 17px;margin-bottom:13px;}
+  .gel-box h3{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
   .gel-box .count{font-size:2rem;font-weight:800;color:var(--navy);}
-  .gel-box .count span{font-size:.95rem;color:var(--muted);font-weight:600;}
+  .gel-box .count span{font-size:.78rem;color:var(--muted);font-weight:600;}
+  .gel-box .sub{font-size:.78rem;color:var(--muted);line-height:1.5;margin-top:4px;}
 
-  .timeline{list-style:none;margin-top:10px;}
-  .timeline li{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--gray-line);align-items:center;}
+  /* ===== JADWAL INTAKE — bagian utama, di-highlight ===== */
+  .schedule-card{
+    background:var(--white);border:2px solid var(--accent);border-radius:var(--radius);
+    box-shadow:0 10px 30px rgba(15,118,110,.16);padding:0 0 18px;overflow:hidden;margin-bottom:18px;
+  }
+  .schedule-card .sc-head{
+    background:var(--accent);color:var(--white);padding:14px 20px;display:flex;align-items:center;
+    justify-content:space-between;gap:10px;flex-wrap:wrap;
+  }
+  .schedule-card .sc-head h2{margin:0;font-size:1.05rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--white);display:flex;align-items:center;}
+  .schedule-card .sc-badge{background:var(--white);color:var(--accent);font-size:.66rem;font-weight:800;padding:4px 10px;border-radius:30px;text-transform:uppercase;letter-spacing:.6px;}
+  .schedule-card .sc-body{padding:6px 20px 0;}
+
+  .timeline{list-style:none;margin-top:6px;}
+  .timeline li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--gray-line);align-items:center;}
   .timeline li:last-child{border-bottom:none;}
   .timeline .t{
-    min-width:66px;font-weight:800;color:var(--white);background:var(--navy);
-    text-align:center;border-radius:6px;padding:5px 4px;font-size:.8rem;letter-spacing:.3px;
+    min-width:70px;font-weight:800;color:var(--white);background:var(--navy);
+    text-align:center;border-radius:7px;padding:7px 4px;font-size:.82rem;letter-spacing:.3px;
   }
-  .timeline .t.start{background:var(--yellow);color:var(--navy-deep);}
-  .timeline .d{font-size:.9rem;}
+  .timeline .t.start{background:var(--accent);}
+  .timeline .d{font-size:.95rem;font-weight:600;color:var(--text);}
+  .timeline .pill{display:inline-block;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;margin-right:7px;vertical-align:middle;}
+  .timeline .pill.gel{background:var(--yellow-soft);color:var(--yellow);border:1px solid var(--yellow);}
+  .timeline .pill.salt{background:#e7efee;color:var(--accent);border:1px solid var(--accent);}
 
-  .note{font-size:.79rem;color:var(--muted);margin-top:8px;}
+  .note{font-size:.7rem;color:var(--muted);margin-top:8px;line-height:1.5;}
+  table.ref{width:100%;border-collapse:collapse;font-size:.72rem;}
+  table.ref th,table.ref td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--gray-line);vertical-align:top;}
+  table.ref th{background:var(--navy);color:var(--white);font-size:.66rem;text-transform:uppercase;letter-spacing:.4px;}
+  table.ref th:first-child{border-radius:6px 0 0 0;}
+  table.ref th:last-child{border-radius:0 6px 0 0;}
+  table.ref td:nth-child(2){font-weight:700;color:var(--navy);}
+  table.ref tr:last-child td{border-bottom:none;}
+  .card.refcard h2{font-size:.82rem;}
+  @media (max-width:560px){table.ref{font-size:.68rem;} table.ref th,table.ref td{padding:6px 6px;}}
   footer{max-width:920px;margin:18px auto 0;padding:0 16px;font-size:.75rem;color:var(--muted);text-align:center;}
 
   @media (max-width:560px){
@@ -141,7 +168,7 @@
     <div class="grid">
       <div class="field">
         <label for="bb">Berat Badan (kg)</label>
-        <input type="number" id="bb" value="60" min="30" max="150" step="0.5">
+        <input type="number" id="bb" value="43" min="30" max="150" step="0.5">
       </div>
       <div class="field">
         <label>Jenis Lomba</label>
@@ -167,6 +194,21 @@
           <option value="22">SIS GO Isotonic — 22 g karbo / sachet</option>
         </select>
       </div>
+      <div class="field">
+        <label>SaltStick Caps (elektrolit)</label>
+        <div class="seg" id="saltSeg">
+          <button type="button" data-salt="yes" class="active">Pakai</button>
+          <button type="button" data-salt="no">Tidak</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Kondisi Cuaca</label>
+        <div class="seg" id="weatherSeg">
+          <button type="button" data-weather="normal">Sejuk / Normal</button>
+          <button type="button" data-weather="hot" class="active">Panas / Lembap</button>
+        </div>
+        <span class="note">memengaruhi dosis elektrolit</span>
+      </div>
     </div>
     <button class="calc-btn" id="calcBtn">Hitung Strategi Fueling</button>
   </section>
@@ -179,6 +221,31 @@
         <small id="rMeta"></small>
       </div>
       <span class="race-pill" id="rPill">HM</span>
+    </div>
+
+    <div class="gel-box">
+      <h3>Rencana Gel (kadens realistis)</h3>
+      <div class="count" id="gelCount"></div>
+      <div class="sub" id="gelSub"></div>
+      <div class="sub" id="gelGap" style="margin-top:8px;font-weight:600;color:var(--navy)"></div>
+    </div>
+
+    <div class="gel-box" id="saltBox" style="display:none">
+      <h3>Elektrolit — SaltStick Caps</h3>
+      <div class="count" id="saltCount"></div>
+      <div class="sub" id="saltSub"></div>
+      <div class="sub" id="saltSub2" style="margin-top:6px"></div>
+    </div>
+
+    <!-- JADWAL INTAKE — BAGIAN UTAMA -->
+    <div class="schedule-card">
+      <div class="sc-head">
+        <h2>Jadwal Intake Saat Race</h2>
+      </div>
+      <div class="sc-body">
+        <ul class="timeline" id="timeline"></ul>
+        <p class="note" id="tlNote"></p>
+      </div>
     </div>
 
     <div class="phase">
@@ -202,12 +269,6 @@
       <div class="sub" id="raceSub"></div>
     </div>
 
-    <div class="gel-box">
-      <h3>Kebutuhan Gel</h3>
-      <div class="count" id="gelCount"></div>
-      <div class="sub" id="gelSub"></div>
-    </div>
-
     <div class="phase">
       <span class="when">30–60 menit pertama setelah finish</span>
       <h3>Recovery</h3>
@@ -215,20 +276,32 @@
       <div class="sub" id="recSub"></div>
     </div>
 
-    <div class="card" style="box-shadow:none;margin-bottom:0">
-      <h2 style="font-size:.92rem"><span class="bar"></span>Jadwal Gel Saat Lomba</h2>
-      <ul class="timeline" id="timeline"></ul>
-      <p class="note" id="tlNote"></p>
-    </div>
+  </section>
+
+  <!-- DASAR ILMIAH -->
+  <section class="card refcard">
+    <h2><span class="bar"></span>Dasar Ilmiah &amp; Sumber</h2>
+    <table class="ref">
+      <tr><th>Fase</th><th>Anjuran</th><th>Sumber</th></tr>
+      <tr><td>Carbo loading (FM)</td><td>10–12 g/kg/hari, 36–48 jam</td><td>ACSM/IOC; Burke dkk. (PMID 36986096)</td></tr>
+      <tr><td>Carbo loading (HM)</td><td>7–10 g/kg/hari, 24–36 jam</td><td>ACSM/IOC Joint Position Stand</td></tr>
+      <tr><td>Pra-lomba (race morning)</td><td>1–4 g/kg, 1–4 jam sebelum start</td><td>ACSM/IOC; Thomas dkk. 2016</td></tr>
+      <tr><td>Saat lomba 1–2 jam</td><td>~30 g/jam</td><td>Jeukendrup 2014</td></tr>
+      <tr><td>Saat lomba 2–2,5 jam</td><td>hingga 60 g/jam</td><td>Jeukendrup 2014</td></tr>
+      <tr><td>Saat lomba &gt;2,5 jam</td><td>hingga 90 g/jam (glukosa+fruktosa)</td><td>Jeukendrup; oksidasi gabungan SGLT-1+GLUT5</td></tr>
+      <tr><td>Recovery</td><td>1–1,2 g/kg/jam + 20–30 g protein</td><td>PMID 36986096</td></tr>
+      <tr><td>Elektrolit (SaltStick Caps)</td><td>1–2 kapsul/jam (1 tiap 30–60 mnt); 215 mg Na/kapsul</td><td>Panduan resmi SaltStick</td></tr>
+    </table>
+    <p class="note">Satu jenis karbo teroksidasi maksimal ~60 g/jam; kombinasi glukosa+fruktosa menaikkan batas hingga ~90–105 g/jam. Target tinggi butuh "gut training" dan jarang tercapai dari gel saja — itu sebabnya kalkulator memisahkan asupan gel dengan sports drink.</p>
   </section>
 </main>
 
 <footer>
-  Perkiraan berbasis pedoman ilmiah (carb loading, fueling, recovery — PMID 36986096). Sesuaikan dengan toleransi pencernaan individu dan konsultasikan untuk kondisi medis tertentu.
+  Perkiraan berbasis pedoman ilmiah (Jeukendrup 2014; ACSM/IOC; Burke dkk. — PMID 36986096). Sesuaikan dengan toleransi pencernaan individu dan konsultasikan untuk kondisi medis tertentu.
 </footer>
 
 <script>
-  var race = 'HM';
+  var race = 'HM', useSalt = 'yes', weather = 'hot';
   document.querySelectorAll('#raceSeg button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('#raceSeg button').forEach(function(x){x.classList.remove('active');});
@@ -236,6 +309,18 @@
       race = b.dataset.race;
       if(race==='HM'){document.getElementById('jam').value=2;document.getElementById('menit').value=0;}
       else{document.getElementById('jam').value=4;document.getElementById('menit').value=0;}
+    });
+  });
+  document.querySelectorAll('#saltSeg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#saltSeg button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); useSalt = b.dataset.salt;
+    });
+  });
+  document.querySelectorAll('#weatherSeg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#weatherSeg button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); weather = b.dataset.weather;
     });
   });
 
@@ -259,13 +344,26 @@
     // Race morning (1-4 g/kg)
     var mLo = Math.round(bb*1), mHi = Math.round(bb*4);
 
-    // During race
+    // During race target (Jeukendrup 2014): durasi menentukan rentang g/jam
     var rLo, rHi;
-    if(race==='HM'){rLo=30;rHi=60;} else{rLo=60;rHi=90;}
-    var perHour = (race==='FM' && totalHours>2.5) ? rHi : Math.round((rLo+rHi)/2);
+    if(totalHours <= 2)        {rLo=30;rHi=60;}
+    else if(totalHours <= 2.5) {rLo=45;rHi=60;}
+    else                       {rLo=60;rHi=90;}
+    var perHourMid = Math.round((rLo+rHi)/2);
+    var targetLoTotal = Math.round(rLo*totalHours);
+    var targetHiTotal = Math.round(rHi*totalHours);
 
-    var totalRaceCarb = perHour*totalHours;
-    var gelsNeeded = Math.ceil(totalRaceCarb/gelCarb);
+    // Rencana gel pada kadens realistis (1 gel tiap ~40 menit + 1 saat start)
+    var gelInterval = 40; // menit
+    var totalMin = Math.round(totalHours*60);
+    var gelsDuring = Math.floor((totalMin - 1) / gelInterval); // gel selama lomba (exclude finish)
+    var gelsNeeded = gelsDuring + 1; // + gel pra-start
+    var carbsFromGels = gelsNeeded * gelCarb;
+    var gelsPerHour = carbsFromGels / totalHours;
+
+    // Sisa kebutuhan dari sumber lain (sports drink / pisang) untuk capai target
+    var gapMidPerHour = Math.max(0, perHourMid - gelsPerHour);
+    var gapMidTotal = Math.round(gapMidPerHour * totalHours);
 
     // Recovery
     var recCarbLo = (bb*1).toFixed(0), recCarbHi=(bb*1.2).toFixed(0);
@@ -281,33 +379,69 @@
     document.getElementById('morningVal').textContent = mLo+'–'+mHi+' g karbo';
     document.getElementById('morningSub').textContent = '1–4 g/kg BB, 1–4 jam sebelum start. Makin dekat ke start, makin sedikit dan ringan. Tambah 1 gel 5–10 menit sebelum start.';
 
-    document.getElementById('raceVal').textContent = perHour+' g karbo / jam';
-    document.getElementById('raceSub').textContent = 'Rentang anjuran '+rLo+'–'+rHi+' g/jam'+(race==='FM'?'. Untuk target di atas 2,5 jam, gunakan kombinasi glukosa, maltodekstrin, dan fruktosa untuk absorpsi maksimal.':'.');
+    document.getElementById('raceVal').textContent = rLo+'–'+rHi+' g karbo / jam';
+    document.getElementById('raceSub').textContent = 'Total target ±'+targetLoTotal+'–'+targetHiTotal+' g selama '+totalHours.toFixed(1).replace('.0','')+' jam'+(rHi>=90?'. Untuk target tinggi (>2,5 jam) wajib kombinasi glukosa+fruktosa dan perlu latihan pencernaan ("gut training").':'.');
 
-    document.getElementById('gelCount').innerHTML = '± '+gelsNeeded+' gel <span>('+gelName+', '+gelCarb+' g/gel)</span>';
-    document.getElementById('gelSub').textContent = 'Total ±'+Math.round(totalRaceCarb)+' g karbo selama '+totalHours.toFixed(1).replace('.0','')+' jam lomba. Lengkapi sisa kebutuhan dengan minuman elektrolit atau pisang bila perlu.';
+    document.getElementById('gelCount').innerHTML = gelsNeeded+' gel <span>(1 tiap ~'+gelInterval+' menit · '+gelName+', '+gelCarb+' g/gel)</span>';
+    document.getElementById('gelSub').textContent = 'Gel menyumbang ±'+Math.round(carbsFromGels)+' g karbo (≈'+Math.round(gelsPerHour)+' g/jam).';
+    document.getElementById('gelGap').textContent = gapMidTotal>0
+      ? 'Tambahkan ±'+gapMidTotal+' g karbo (≈'+Math.round(gapMidPerHour)+' g/jam) dari sports drink / pisang untuk mencapai target.'
+      : 'Asupan gel sudah memenuhi target — sisanya cukup dari air dan elektrolit.';
 
     document.getElementById('recVal').textContent = recCarbLo+'–'+recCarbHi+' g karbo + 20–30 g protein';
     document.getElementById('recSub').textContent = 'Konsumsi dalam 30–60 menit pertama setelah finish. Resintesis glikogen tercepat di periode awal recovery — jangan ditunda.';
 
+    // SaltStick Caps (tipe telan) — jadwal jadi satu sumber kebenaran
+    var saltInterval = (weather==='hot') ? 30 : 60; // menit
+    var capsPerHour  = (weather==='hot') ? 2 : 1;
+    var saltMins = [];
+    if(useSalt==='yes'){
+      for(var s=saltInterval; s<totalMin; s+=saltInterval){ saltMins.push(s); }
+      if(saltMins.length===0) saltMins.push(Math.round(totalMin/2)); // durasi singkat: minimal 1
+    }
+    var capsTotal = saltMins.length;
+    var naTotal = capsTotal * 215;
+
+    var saltBox = document.getElementById('saltBox');
+    if(useSalt==='yes'){
+      saltBox.style.display='block';
+      document.getElementById('saltCount').innerHTML = capsTotal+' kapsul <span>(1 tiap '+saltInterval+' menit · '+(capsPerHour*215)+' mg Na/jam)</span>';
+      document.getElementById('saltSub').textContent = 'Telan dengan air. Total sodium ±'+naTotal+' mg · cuaca '+(weather==='hot'?'panas/lembap':'sejuk/normal')+'.';
+      document.getElementById('saltSub2').textContent = (totalHours<2 && weather!=='hot')
+        ? 'Catatan: lomba <2 jam di cuaca sejuk umumnya cukup dengan air — SaltStick opsional.'
+        : 'Elektrolit & cairan tidak harus bersamaan: minum air saat haus, ambil kapsul sesuai jadwal. Uji dulu saat latihan.';
+    } else {
+      saltBox.style.display='none';
+    }
+
     var tl = document.getElementById('timeline');
     tl.innerHTML='';
-    function row(t,d,isStart){
+    function fmt(min){var hh=Math.floor(min/60),mm=min%60;return (hh>0?hh+'j':'')+(mm<10&&hh>0?'0':'')+mm+'m';}
+
+    // gabungkan event gel + SaltStick berdasarkan menit
+    var ev = {};
+    function add(min,type){ if(!ev[min]) ev[min]={gel:false,salt:false}; ev[min][type]=true; }
+    add(0,'gel'); // gel saat START
+    for(var i=1;i<gelsNeeded;i++){ add(i*gelInterval,'gel'); }
+    saltMins.forEach(function(m){ add(m,'salt'); });
+    var saltCaps = capsTotal;
+
+    var mins = Object.keys(ev).map(Number).sort(function(a,b){return a-b;});
+    mins.forEach(function(m){
+      var e=ev[m], isStart=(m===0);
+      var pills='', txt=[];
+      if(e.gel){ pills+='<span class="pill gel">Gel</span>'; txt.push(isStart?'Gel 1 — 5–10 menit sebelum mulai':'Ambil 1 gel'); }
+      if(e.salt){ pills+='<span class="pill salt">Salt</span>'; txt.push('1 kapsul SaltStick'); }
       var li=document.createElement('li');
-      li.innerHTML='<span class="t'+(isStart?' start':'')+'">'+t+'</span><span class="d">'+d+'</span>';
+      li.innerHTML='<span class="t'+(isStart?' start':'')+'">'+(isStart?'START':fmt(m))+'</span>'+
+                   '<span class="d">'+pills+txt.join(' + ')+'</span>';
       tl.appendChild(li);
-    }
-    row('START','1 gel 5–10 menit sebelum mulai',true);
-    var interval = (race==='HM')?35:30;
-    var totalMin = Math.round(totalHours*60);
-    var t = interval, n = 1;
-    while(t < totalMin && n < gelsNeeded){
-      var hh = Math.floor(t/60), mm = t%60;
-      var label = (hh>0? hh+'j':'')+(mm<10&&hh>0?'0':'')+mm+'m';
-      row(label,'Gel '+(n+1)+' — jaga asupan ±'+perHour+' g/jam');
-      t += interval; n++;
-    }
-    document.getElementById('tlNote').textContent='Gel tiap ±'+interval+' menit. Selalu teguk air saat konsumsi gel non-isotonik (EJ, Maurten, Strive). SIS isotonik dapat dikonsumsi tanpa air.';
+    });
+
+    var note='Total '+gelsNeeded+' gel (1 tiap ~'+gelInterval+' menit)';
+    if(useSalt==='yes'){ note+=' + '+saltCaps+' kapsul SaltStick (1 tiap '+saltInterval+' menit)'; }
+    note+='. Selalu teguk air saat konsumsi gel non-isotonik (EJ, Maurten, Strive); SIS isotonik dapat tanpa air.';
+    document.getElementById('tlNote').textContent=note;
 
     document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
   });
