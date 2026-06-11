@@ -134,6 +134,7 @@
   .timeline .pill{display:inline-block;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;margin-right:7px;vertical-align:middle;}
   .timeline .pill.gel{background:var(--yellow-soft);color:var(--yellow);border:1px solid var(--yellow);}
   .timeline .pill.salt{background:#e7efee;color:var(--accent);border:1px solid var(--accent);}
+  .timeline .pill.katsuo{background:#23303f;color:#fff;border:1px solid #23303f;}
 
   .note{font-size:.7rem;color:var(--muted);margin-top:8px;line-height:1.5;}
   table.ref{width:100%;border-collapse:collapse;font-size:.72rem;}
@@ -209,6 +210,14 @@
         </div>
         <span class="note">memengaruhi dosis elektrolit</span>
       </div>
+      <div class="field" style="grid-column:1/-1">
+        <label>Katsuo Stamina (tablet anti-laktat)</label>
+        <div class="seg" id="katsuoSeg">
+          <button type="button" data-katsuo="no" class="active">Tidak</button>
+          <button type="button" data-katsuo="yes">Pakai</button>
+        </div>
+        <span class="note">skema dosis resmi untuk atlet ≤75 kg</span>
+      </div>
     </div>
     <button class="calc-btn" id="calcBtn">Hitung Strategi Fueling</button>
   </section>
@@ -235,6 +244,13 @@
       <div class="count" id="saltCount"></div>
       <div class="sub" id="saltSub"></div>
       <div class="sub" id="saltSub2" style="margin-top:6px"></div>
+    </div>
+
+    <div class="gel-box" id="katsuoBox" style="display:none">
+      <h3>Katsuo Stamina — Tablet</h3>
+      <div class="count" id="katsuoCount"></div>
+      <div class="sub" id="katsuoSub"></div>
+      <div class="sub" id="katsuoSub2" style="margin-top:6px"></div>
     </div>
 
     <!-- JADWAL INTAKE — BAGIAN UTAMA -->
@@ -291,6 +307,7 @@
       <tr><td>Saat lomba &gt;2,5 jam</td><td>hingga 90 g/jam (glukosa+fruktosa)</td><td>Jeukendrup; oksidasi gabungan SGLT-1+GLUT5</td></tr>
       <tr><td>Recovery</td><td>1–1,2 g/kg/jam + 20–30 g protein</td><td>PMID 36986096</td></tr>
       <tr><td>Elektrolit (SaltStick Caps)</td><td>1–2 kapsul/jam (1 tiap 30–60 mnt); 215 mg Na/kapsul</td><td>Panduan resmi SaltStick</td></tr>
+      <tr><td>Katsuo Stamina (≤75 kg)</td><td>HM: 4 tab pre-race · FM: 4 tab pre-race + 4 tab/120 mnt</td><td>Panduan resmi staminasports.com</td></tr>
     </table>
     <p class="note">Satu jenis karbo teroksidasi maksimal ~60 g/jam; kombinasi glukosa+fruktosa menaikkan batas hingga ~90–105 g/jam. Target tinggi butuh "gut training" dan jarang tercapai dari gel saja — itu sebabnya kalkulator memisahkan asupan gel dengan sports drink.</p>
   </section>
@@ -301,7 +318,7 @@
 </footer>
 
 <script>
-  var race = 'HM', useSalt = 'yes', weather = 'hot';
+  var race = 'HM', useSalt = 'yes', weather = 'hot', useKatsuo = 'no';
   document.querySelectorAll('#raceSeg button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('#raceSeg button').forEach(function(x){x.classList.remove('active');});
@@ -321,6 +338,12 @@
     b.addEventListener('click', function(){
       document.querySelectorAll('#weatherSeg button').forEach(function(x){x.classList.remove('active');});
       b.classList.add('active'); weather = b.dataset.weather;
+    });
+  });
+  document.querySelectorAll('#katsuoSeg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#katsuoSeg button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active'); useKatsuo = b.dataset.katsuo;
     });
   });
 
@@ -414,17 +437,44 @@
       saltBox.style.display='none';
     }
 
+    // Katsuo Stamina (skema resmi atlet ≤75 kg) — satu sumber kebenaran
+    var katsuoPre = 4;                 // tablet 30 menit sebelum start
+    var katsuoDuringDose = 4;          // tablet per pengulangan
+    var katsuoInterval = 120;          // menit (hanya FM)
+    var katsuoMins = [];               // menit dosis SAAT lomba (di luar pre-race)
+    if(useKatsuo==='yes' && race==='FM'){
+      for(var k=katsuoInterval; k<totalMin; k+=katsuoInterval){ katsuoMins.push(k); }
+    }
+    var katsuoTotal = (useKatsuo==='yes') ? (katsuoPre + katsuoMins.length*katsuoDuringDose) : 0;
+
+    var katsuoBox = document.getElementById('katsuoBox');
+    if(useKatsuo==='yes'){
+      katsuoBox.style.display='block';
+      document.getElementById('katsuoCount').innerHTML = katsuoTotal+' tablet';
+      document.getElementById('katsuoSub').innerHTML = (race==='HM')
+        ? '<b>'+katsuoPre+' tablet</b> 30 menit sebelum start (Half-Marathon cukup sekali di awal).'
+        : '<b>'+katsuoPre+' tablet</b> 30 menit sebelum start, lalu <b>'+katsuoDuringDose+' tablet tiap '+katsuoInterval+' menit</b> ('+katsuoMins.length+'× saat lomba) hingga finish.';
+      document.getElementById('katsuoSub2').textContent = 'Telan dengan 200–300 ml air. Skema resmi untuk atlet ≤75 kg. Berfungsi memecah asam laktat & menekan kerusakan otot — uji dulu saat latihan.';
+    } else {
+      katsuoBox.style.display='none';
+    }
+
     var tl = document.getElementById('timeline');
     tl.innerHTML='';
     function fmt(min){var hh=Math.floor(min/60),mm=min%60;return (hh>0?hh+'j':'')+(mm<10&&hh>0?'0':'')+mm+'m';}
 
     // gabungkan event gel + SaltStick berdasarkan menit
     var ev = {};
-    function add(min,type){ if(!ev[min]) ev[min]={gel:false,salt:false}; ev[min][type]=true; }
+    function add(min,type){ if(!ev[min]) ev[min]={gel:false,salt:false,katsuo:0}; ev[min][type]=true; }
+    function addK(min,tabs){ if(!ev[min]) ev[min]={gel:false,salt:false,katsuo:0}; ev[min].katsuo+=tabs; }
     add(0,'gel'); // gel saat START
     for(var i=1;i<gelsNeeded;i++){ add(i*gelInterval,'gel'); }
     saltMins.forEach(function(m){ add(m,'salt'); });
     var saltCaps = capsTotal;
+    if(useKatsuo==='yes'){
+      addK(0,katsuoPre);                              // dosis pre-race (30 mnt sebelum)
+      katsuoMins.forEach(function(m){ addK(m,katsuoDuringDose); });
+    }
 
     var mins = Object.keys(ev).map(Number).sort(function(a,b){return a-b;});
     mins.forEach(function(m){
@@ -432,6 +482,7 @@
       var pills='', txt=[];
       if(e.gel){ pills+='<span class="pill gel">Gel</span>'; txt.push(isStart?'Gel 1 — 5–10 menit sebelum mulai':'Ambil 1 gel'); }
       if(e.salt){ pills+='<span class="pill salt">Salt</span>'; txt.push('1 kapsul SaltStick'); }
+      if(e.katsuo>0){ pills+='<span class="pill katsuo">Katsuo</span>'; txt.push(e.katsuo+' tablet Katsuo'+(isStart?' (30 mnt sebelum start)':'')); }
       var li=document.createElement('li');
       li.innerHTML='<span class="t'+(isStart?' start':'')+'">'+(isStart?'START':fmt(m))+'</span>'+
                    '<span class="d">'+pills+txt.join(' + ')+'</span>';
@@ -440,6 +491,7 @@
 
     var note='Total '+gelsNeeded+' gel (1 tiap ~'+gelInterval+' menit)';
     if(useSalt==='yes'){ note+=' + '+saltCaps+' kapsul SaltStick (1 tiap '+saltInterval+' menit)'; }
+    if(useKatsuo==='yes'){ note+=' + '+katsuoTotal+' tablet Katsuo'; }
     note+='. Selalu teguk air saat konsumsi gel non-isotonik (EJ, Maurten, Strive); SIS isotonik dapat tanpa air.';
     document.getElementById('tlNote').textContent=note;
 
