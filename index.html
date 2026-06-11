@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Fueling Lari — HM &amp; FM</title>
+<style>
+  :root{
+    --navy:#0d2c54;        /* biru tua */
+    --navy-light:#1b4a86;
+    --navy-deep:#091f3c;
+    --accent:#1769c4;      /* biru aksen */
+    --yellow:#f2b705;      /* kuning */
+    --yellow-soft:#fdf3d3;
+    --white:#ffffff;
+    --gray:#f5f7fa;
+    --gray-line:#e3e8f0;
+    --text:#1a2538;
+    --muted:#62708a;
+    --radius:14px;
+    --shadow:0 6px 24px rgba(13,44,84,.09);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--gray);
+    color:var(--text);
+    line-height:1.55;
+    padding:0 0 60px;
+  }
+  /* HEADER */
+  header{
+    background:linear-gradient(120deg,var(--navy-deep) 0%,var(--navy) 55%,var(--navy-light) 120%);
+    color:var(--white);
+    padding:34px 20px 30px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:4px solid var(--yellow);
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+  header h1{font-size:1.55rem;font-weight:800;letter-spacing:.2px;}
+  header .tag{
+    display:inline-block;background:var(--yellow);color:var(--navy-deep);
+    font-size:.7rem;font-weight:800;padding:3px 11px;border-radius:4px;
+    text-transform:uppercase;letter-spacing:.6px;margin-left:6px;vertical-align:middle;
+  }
+  header p{margin-top:10px;color:#c4d2e6;font-size:.92rem;max-width:660px;}
+
+  main{max-width:920px;margin:-16px auto 0;padding:0 16px;}
+
+  .card{
+    background:var(--white);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:24px 22px;margin-bottom:18px;
+    border:1px solid var(--gray-line);
+  }
+  .card h2{
+    font-size:1.02rem;color:var(--navy);margin-bottom:18px;font-weight:800;
+    display:flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.5px;
+  }
+  .card h2 .bar{width:5px;height:18px;border-radius:2px;background:var(--yellow);display:inline-block;}
+
+  /* FORM */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .field{display:flex;flex-direction:column;gap:7px;}
+  .field label{font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .field input,.field select{
+    padding:11px 12px;border:1.5px solid var(--gray-line);border-radius:8px;
+    font-size:1rem;color:var(--text);background:var(--white);transition:.15s;width:100%;
+  }
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(23,105,196,.14);}
+
+  .seg{display:flex;gap:8px;}
+  .seg button{
+    flex:1;padding:11px 8px;border:1.5px solid var(--gray-line);background:var(--white);
+    border-radius:8px;font-size:.92rem;font-weight:700;color:var(--muted);cursor:pointer;transition:.15s;
+  }
+  .seg button.active{background:var(--navy);border-color:var(--navy);color:var(--white);}
+
+  .calc-btn{
+    margin-top:20px;width:100%;padding:15px;border:none;border-radius:9px;
+    background:var(--navy);color:var(--white);font-size:1rem;font-weight:800;
+    cursor:pointer;letter-spacing:.6px;transition:.15s;text-transform:uppercase;
+  }
+  .calc-btn:hover{background:var(--navy-light);}
+  .calc-btn:active{transform:translateY(1px);}
+
+  /* RESULTS */
+  #results{display:none;padding-top:0;}
+  .res-head{
+    background:var(--navy);color:var(--white);border-radius:var(--radius) var(--radius) 0 0;
+    padding:18px 22px;margin:-24px -22px 20px;display:flex;justify-content:space-between;
+    align-items:center;flex-wrap:wrap;gap:8px;border-bottom:3px solid var(--yellow);
+  }
+  .res-head .race-pill{
+    background:var(--yellow);color:var(--navy-deep);font-weight:800;padding:5px 14px;border-radius:5px;font-size:.82rem;letter-spacing:.5px;
+  }
+  .res-head small{display:block;color:#c4d2e6;font-weight:400;margin-top:2px;}
+
+  .phase{border-left:4px solid var(--yellow);background:var(--gray);border-radius:0 10px 10px 0;padding:15px 18px;margin-bottom:14px;}
+  .phase .when{font-size:.74rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .phase h3{font-size:.98rem;color:var(--navy);margin:3px 0;font-weight:800;}
+  .phase .big{font-size:1.3rem;font-weight:800;color:var(--navy);margin:6px 0 3px;}
+  .phase .sub{font-size:.88rem;color:var(--muted);}
+
+  .gel-box{background:var(--yellow-soft);border:1.5px solid var(--yellow);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+  .gel-box h3{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:4px;}
+  .gel-box .count{font-size:2rem;font-weight:800;color:var(--navy);}
+  .gel-box .count span{font-size:.95rem;color:var(--muted);font-weight:600;}
+
+  .timeline{list-style:none;margin-top:10px;}
+  .timeline li{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--gray-line);align-items:center;}
+  .timeline li:last-child{border-bottom:none;}
+  .timeline .t{
+    min-width:66px;font-weight:800;color:var(--white);background:var(--navy);
+    text-align:center;border-radius:6px;padding:5px 4px;font-size:.8rem;letter-spacing:.3px;
+  }
+  .timeline .t.start{background:var(--yellow);color:var(--navy-deep);}
+  .timeline .d{font-size:.9rem;}
+
+  .note{font-size:.79rem;color:var(--muted);margin-top:8px;}
+  footer{max-width:920px;margin:18px auto 0;padding:0 16px;font-size:.75rem;color:var(--muted);text-align:center;}
+
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr;}
+    header h1{font-size:1.28rem;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Kalkulator Fueling Lari<span class="tag">HM &amp; FM</span></h1>
+    <p>Strategi carbo-loading, fueling saat lomba, kebutuhan gel, dan recovery — berbasis berat badan dan target waktu, sesuai pedoman ilmiah (PMID 36986096).</p>
+  </div>
+</header>
+
+<main>
+  <!-- INPUT -->
+  <section class="card">
+    <h2><span class="bar"></span>Data Pelari</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="bb">Berat Badan (kg)</label>
+        <input type="number" id="bb" value="60" min="30" max="150" step="0.5">
+      </div>
+      <div class="field">
+        <label>Jenis Lomba</label>
+        <div class="seg" id="raceSeg">
+          <button type="button" data-race="HM" class="active">Half Marathon</button>
+          <button type="button" data-race="FM">Full Marathon</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="jam">Target Waktu</label>
+        <div class="seg" style="gap:6px">
+          <input type="number" id="jam" value="2" min="0" max="8" style="text-align:center" aria-label="jam">
+          <input type="number" id="menit" value="0" min="0" max="59" style="text-align:center" aria-label="menit">
+        </div>
+        <span class="note">format: jam &nbsp;|&nbsp; menit</span>
+      </div>
+      <div class="field">
+        <label for="gel">Jenis Gel</label>
+        <select id="gel">
+          <option value="35">EJ Sport — 35 g karbo / sachet</option>
+          <option value="25" selected>Maurten Gel 100 — 25 g karbo / sachet</option>
+          <option value="24">Strive — 24 g karbo / sachet</option>
+          <option value="22">SIS GO Isotonic — 22 g karbo / sachet</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" id="calcBtn">Hitung Strategi Fueling</button>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="card" id="results">
+    <div class="res-head">
+      <div>
+        <strong id="rTitle">Strategi Fueling</strong>
+        <small id="rMeta"></small>
+      </div>
+      <span class="race-pill" id="rPill">HM</span>
+    </div>
+
+    <div class="phase">
+      <span class="when">1–2 hari sebelum lomba</span>
+      <h3>Carbo Loading</h3>
+      <div class="big" id="loadVal"></div>
+      <div class="sub" id="loadSub"></div>
+    </div>
+
+    <div class="phase">
+      <span class="when">1–4 jam sebelum start</span>
+      <h3>Race Morning</h3>
+      <div class="big" id="morningVal"></div>
+      <div class="sub" id="morningSub"></div>
+    </div>
+
+    <div class="phase">
+      <span class="when">selama lomba</span>
+      <h3>Intake Saat Lomba</h3>
+      <div class="big" id="raceVal"></div>
+      <div class="sub" id="raceSub"></div>
+    </div>
+
+    <div class="gel-box">
+      <h3>Kebutuhan Gel</h3>
+      <div class="count" id="gelCount"></div>
+      <div class="sub" id="gelSub"></div>
+    </div>
+
+    <div class="phase">
+      <span class="when">30–60 menit pertama setelah finish</span>
+      <h3>Recovery</h3>
+      <div class="big" id="recVal"></div>
+      <div class="sub" id="recSub"></div>
+    </div>
+
+    <div class="card" style="box-shadow:none;margin-bottom:0">
+      <h2 style="font-size:.92rem"><span class="bar"></span>Jadwal Gel Saat Lomba</h2>
+      <ul class="timeline" id="timeline"></ul>
+      <p class="note" id="tlNote"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Perkiraan berbasis pedoman ilmiah (carb loading, fueling, recovery — PMID 36986096). Sesuaikan dengan toleransi pencernaan individu dan konsultasikan untuk kondisi medis tertentu.
+</footer>
+
+<script>
+  var race = 'HM';
+  document.querySelectorAll('#raceSeg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#raceSeg button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      race = b.dataset.race;
+      if(race==='HM'){document.getElementById('jam').value=2;document.getElementById('menit').value=0;}
+      else{document.getElementById('jam').value=4;document.getElementById('menit').value=0;}
+    });
+  });
+
+  function gnum(id){return parseFloat(document.getElementById(id).value)||0;}
+
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    var bb = gnum('bb');
+    if(bb<=0){alert('Isi berat badan dulu ya.');return;}
+    var jam = gnum('jam'), menit = gnum('menit');
+    var totalHours = jam + menit/60;
+    if(totalHours<=0){ totalHours = (race==='HM')?2:4; }
+    var gelCarb = gnum('gel');
+    var gelName = document.getElementById('gel').selectedOptions[0].text.split(' — ')[0];
+
+    // Carbo loading
+    var loadLo, loadHi, loadWindow;
+    if(race==='HM'){loadLo=7;loadHi=10;loadWindow='24–36 jam sebelum lomba';}
+    else{loadLo=10;loadHi=12;loadWindow='36–48 jam sebelum lomba';}
+    var lLoadLo = Math.round(bb*loadLo), lLoadHi = Math.round(bb*loadHi);
+
+    // Race morning (1-4 g/kg)
+    var mLo = Math.round(bb*1), mHi = Math.round(bb*4);
+
+    // During race
+    var rLo, rHi;
+    if(race==='HM'){rLo=30;rHi=60;} else{rLo=60;rHi=90;}
+    var perHour = (race==='FM' && totalHours>2.5) ? rHi : Math.round((rLo+rHi)/2);
+
+    var totalRaceCarb = perHour*totalHours;
+    var gelsNeeded = Math.ceil(totalRaceCarb/gelCarb);
+
+    // Recovery
+    var recCarbLo = (bb*1).toFixed(0), recCarbHi=(bb*1.2).toFixed(0);
+
+    document.getElementById('results').style.display='block';
+    document.getElementById('rPill').textContent = race;
+    document.getElementById('rTitle').textContent = (race==='HM'?'Half Marathon':'Full Marathon')+' — Strategi Fueling';
+    document.getElementById('rMeta').textContent = bb+' kg · target '+jam+'j '+menit+'m · gel '+gelName;
+
+    document.getElementById('loadVal').textContent = lLoadLo+'–'+lLoadHi+' g karbo / hari';
+    document.getElementById('loadSub').textContent = loadLo+'–'+loadHi+' g/kg BB/hari · '+loadWindow+'. Pilih karbo mudah cerna (nasi, pasta, roti, buah).';
+
+    document.getElementById('morningVal').textContent = mLo+'–'+mHi+' g karbo';
+    document.getElementById('morningSub').textContent = '1–4 g/kg BB, 1–4 jam sebelum start. Makin dekat ke start, makin sedikit dan ringan. Tambah 1 gel 5–10 menit sebelum start.';
+
+    document.getElementById('raceVal').textContent = perHour+' g karbo / jam';
+    document.getElementById('raceSub').textContent = 'Rentang anjuran '+rLo+'–'+rHi+' g/jam'+(race==='FM'?'. Untuk target di atas 2,5 jam, gunakan kombinasi glukosa, maltodekstrin, dan fruktosa untuk absorpsi maksimal.':'.');
+
+    document.getElementById('gelCount').innerHTML = '± '+gelsNeeded+' gel <span>('+gelName+', '+gelCarb+' g/gel)</span>';
+    document.getElementById('gelSub').textContent = 'Total ±'+Math.round(totalRaceCarb)+' g karbo selama '+totalHours.toFixed(1).replace('.0','')+' jam lomba. Lengkapi sisa kebutuhan dengan minuman elektrolit atau pisang bila perlu.';
+
+    document.getElementById('recVal').textContent = recCarbLo+'–'+recCarbHi+' g karbo + 20–30 g protein';
+    document.getElementById('recSub').textContent = 'Konsumsi dalam 30–60 menit pertama setelah finish. Resintesis glikogen tercepat di periode awal recovery — jangan ditunda.';
+
+    var tl = document.getElementById('timeline');
+    tl.innerHTML='';
+    function row(t,d,isStart){
+      var li=document.createElement('li');
+      li.innerHTML='<span class="t'+(isStart?' start':'')+'">'+t+'</span><span class="d">'+d+'</span>';
+      tl.appendChild(li);
+    }
+    row('START','1 gel 5–10 menit sebelum mulai',true);
+    var interval = (race==='HM')?35:30;
+    var totalMin = Math.round(totalHours*60);
+    var t = interval, n = 1;
+    while(t < totalMin && n < gelsNeeded){
+      var hh = Math.floor(t/60), mm = t%60;
+      var label = (hh>0? hh+'j':'')+(mm<10&&hh>0?'0':'')+mm+'m';
+      row(label,'Gel '+(n+1)+' — jaga asupan ±'+perHour+' g/jam');
+      t += interval; n++;
+    }
+    document.getElementById('tlNote').textContent='Gel tiap ±'+interval+' menit. Selalu teguk air saat konsumsi gel non-isotonik (EJ, Maurten, Strive). SIS isotonik dapat dikonsumsi tanpa air.';
+
+    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  document.getElementById('calcBtn').click();
+</script>
+</body>
+</html>
